@@ -1,8 +1,8 @@
 nodes = [
-  { :hostname => 'kubernetes-master',  :ip => '172.16.66.2', :ram => 4096 },
-  { :hostname => 'kubernetes-node1',  :ip => '172.16.66.3', :ram => 2048 },
-  { :hostname => 'kubernetes-node2',  :ip => '172.16.66.4', :ram => 2048 },
-  { :hostname => 'kubernetes-node3',  :ip => '172.16.66.5', :ram => 2048 }
+  { :hostname => 'master',  :ip => '172.16.66.2', :ram => 2048 },
+  { :hostname => 'node1',  :ip => '172.16.66.3', :ram => 1024 },
+  { :hostname => 'node2',  :ip => '172.16.66.4', :ram => 1024 },
+  { :hostname => 'node3',  :ip => '172.16.66.5', :ram => 1024 }
 ]
 
 Vagrant.configure("2") do |config|
@@ -12,13 +12,14 @@ Vagrant.configure("2") do |config|
       nodeconfig.vm.hostname = node[:hostname] + ".box"
       nodeconfig.vm.network :private_network, ip: node[:ip]
       memory = node[:ram] ? node[:ram] : 256;
-      nodeconfig.vm.provider :virtualbox do |vb|
-        vb.customize [
-          "modifyvm", :id,
-          "--memory", memory.to_s,
-          "--cpus", "4"
-        ]
+      nodeconfig.vm.provider :libvirt do |libvirt|
+        libvirt.memory = memory.to_s
+        libvirt.cpus = 1
       end
     end
   end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    swapoff -a
+  SHELL
 end

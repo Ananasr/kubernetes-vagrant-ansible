@@ -1,8 +1,7 @@
 ---
-
-- name:            reload systemd
-  become:          true
+- name: reload systemd
+  become: true
   systemd:
-    state:         restarted
+    state: restarted
     daemon_reload: yes
-    name:          kubelet
+    name: kubelet

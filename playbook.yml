@@ -1,7 +1,8 @@
 ---
-
-- hosts: all-nodes
+- hosts: all
+  become: true
   roles:
+    - docker
     - kubernetes-common
 
 - hosts: kube-master
