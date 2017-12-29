@@ -3,12 +3,4 @@
   become: true
   roles:
     - docker
-    - kubernetes-common
-
-- hosts: kube-master
-  roles:
-    - kubernetes-master
-
-- hosts: kube-nodes
-  roles:
-    - kubernetes-nodes
+    - kubernetes
